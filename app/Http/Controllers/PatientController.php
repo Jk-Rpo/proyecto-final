@@ -45,7 +45,7 @@ class PatientController extends Controller
 
         Patient::create($request->all());
             
-        return back()->with('success', '✅ Paciente guardado exitosamente.');
+        return back()->with('success', '✅ Paciente  guardado exitosamente.');
     }
     /**
      * Display the specified resource.

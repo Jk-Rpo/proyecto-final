@@ -6,14 +6,14 @@ use App\Models\Reception;
 use App\Http\Resources\ReceptionResource;
 use Illuminate\Http\Request;
 
-class ReceptionController extends Controller
+class ReceptionsApiController extends Controller
 {
     public function index() {
-        return ReceptionResource::collection(Reception::with(['patient','cups'])->latest()->get());
+        return Reception::with(['patient','cups'])->latest()->get();
     }
 
     public function show(Reception $reception) {
-        return new ReceptionResource($reception->load(['patient','cups']));
+        return $reception->load(['patient','cups']);
     }
 
     public function store(Request $request) {
@@ -26,7 +26,7 @@ class ReceptionController extends Controller
         ]);
         $reception = Reception::create($validated);
         if($request->cups) $reception->cups()->sync($request->cups);
-        return new ReceptionResource($reception->load(['patient','cups']));
+        return $reception->load(['patient','cups']);
     }
 
     public function update(Request $request, Reception $reception) {
@@ -39,7 +39,7 @@ class ReceptionController extends Controller
         ]);
         $reception->update($validated);
         if($request->cups) $reception->cups()->sync($request->cups);
-        return new ReceptionResource($reception->load(['patient','cups']));
+        return $reception->load(['patient','cups']);
     }
 
     public function destroy(Reception $reception) {

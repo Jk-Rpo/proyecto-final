@@ -10,7 +10,18 @@ class Patient extends Model
     public $timestamps = true;
 
     protected $fillable = [
-        
+           'identity_type',
+           'identity', 
+           'first_name', 
+           'second_name', 
+           'first_surname', 
+           'second_surname',
+           'birthdate',
+           'gender', 
+           'address', 
+           'email',
+           'phone', 
+
     ];
 
     // Relación con Recepciones

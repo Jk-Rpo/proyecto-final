@@ -8,10 +8,28 @@ window.Alpine = Alpine;
 
 Alpine.start();
 
-import ReceptionCreate from './components/receptions/ReceptionsCreate.vue'
+import ReceptionsCreate from './components/receptions/ReceptionsCreate.vue'
+import ReceptionsIndex from './components/receptions/ReceptionsIndex.vue'
+import ReceptionsShow from './components/receptions/ReceptionsShow.vue'
+import ReceptionsEdit from './components/receptions/ReceptionsEdit.vue'
+
+import PatientsIndex from "./components/patients/PatientsIndex.vue";
+import PatientsCreate from "./components/patients/PatientsCreate.vue";
+import PatientsEdit from "./components/patients/PatientsEdit.vue";
+import PatientsShow from "./components/patients/PatientsShow.vue";  
+
 
 const app = createApp({})
-app.component('receptions-create', ReceptionCreate)
+app.component('receptions-create', ReceptionsCreate)
+app.component('receptions-index', ReceptionsIndex)    
+app.component('receptions-show', ReceptionsShow)
+app.component('receptions-edit', ReceptionsEdit)
+
+app.component("patients-index", PatientsIndex);
+app.component("patients-create", PatientsCreate);
+app.component("patients-edit", PatientsEdit);
+app.component("patients-show", PatientsShow);
+
 app.mount('#app')
 
 // import { createApp } from 'vue'

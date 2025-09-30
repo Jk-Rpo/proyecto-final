@@ -1,9 +1,12 @@
 <?php
 
-use App\Http\Controllers\Api\ReceptionController;
-use App\Http\Controllers\Api\PatientController;
-use App\Http\Controllers\Api\CupController;
+use App\Http\Controllers\Api\PatientApiController;
+use App\Http\Controllers\Api\ReceptionsApiController;
 
-Route::apiResource('receptions', ReceptionController::class);
-Route::get('patients', [PatientController::class,'index']);
-Route::get('cups', [CupController::class,'index']);
+
+
+
+// routes/api.php
+Route::apiResource('patients', PatientApiController::class);
+Route::apiResource('receptions', ReceptionsApiController::class);
+Route::get('patients/search/{identity}', [PatientApiController::class, 'searchByDocument']);

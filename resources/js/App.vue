@@ -6,13 +6,13 @@
       <nav>
         <ul class="nav flex-column">
           <li class="nav-item mb-2">
-            <router-link to="/receptions" class="nav-link text-white">Recepciones</router-link>
+            <a href="#" class="nav-link text-white">Dashboard</a> <a to="/receptions" class="nav-link text-white">Recepciones</a>
           </li>
           <li class="nav-item mb-2">
-            <router-link to="/patients" class="nav-link text-white">Pacientes</router-link>
+            <a href="/patients" class="nav-link text-white">Pacientes</a>
           </li>
           <li class="nav-item mb-2">
-            <router-link to="/cups" class="nav-link text-white">CUPS</router-link>
+            <a href="/cups" class="nav-link text-white">CUPS</a>
           </li>
         </ul>
       </nav>

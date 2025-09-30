@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <h1>Crear Recepción 11111111111</h1>
+    <h1>Crear Recepción</h1>
 
     <!-- Errores -->
     <div v-if="errors.length" class="alert alert-danger">
@@ -12,10 +12,7 @@
     <form @submit.prevent="submitForm">
       <div class="mb-3">
         <label>Paciente</label>
-        <select v-model="form.patient_id" class="form-control" required>
-          <option value="">Seleccione</option>
-          <option v-for="p in patients" :key="p.id" :value="p.id">{{ p.name }}</option>
-        </select>
+        <PatientSearch ></PatientSearch>
       </div>
 
       <div class="mb-3">
@@ -45,11 +42,12 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
+import PatientSearch from '../patients/PatientSearch.vue'
 
 const patients = ref([])
 const cups = ref([])
 const errors = ref([])
-
+const patient = ref({})
 const form = ref({
   patient_id: '',
   observations: '',
@@ -81,6 +79,14 @@ const submitForm = async () => {
     } else {
       errors.value = ['Error al guardar la recepción']
     }
+  }
+}
+const buscarpaciente = async (documento) => {
+  try {
+    const resPatient = await axios.get(`/api/patients/${form.value.patient_id}`)
+    patient.value = resPatient.data
+  } catch (e) {
+    console.error(e)
   }
 }
 </script>

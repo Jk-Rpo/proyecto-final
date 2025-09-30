@@ -1,7 +1,15 @@
 <template>
-  <div>
+  <div class="container">
     <h1>Editar Recepción</h1>
-    <form @submit.prevent="submit">
+
+    <!-- Errores -->
+    <div v-if="errors.length" class="alert alert-danger">
+      <ul>
+        <li v-for="(error, index) in errors" :key="index">{{ error }}</li>
+      </ul>
+    </div>
+
+    <form @submit.prevent="submitForm">
       <div class="mb-3">
         <label>Paciente</label>
         <select v-model="form.patient_id" class="form-control" required>
@@ -22,14 +30,20 @@
 
       <div class="mb-3">
         <label>CUPS</label>
-        <div v-for="c in cups" :key="c.id" class="form-check">
-          <input type="checkbox" class="form-check-input" :value="c.id" v-model="form.cups">
-          <label class="form-check-label">{{ c.name }}</label>
+        <div class="form-check" v-for="c in cups" :key="c.id">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            :value="c.id"
+            v-model="form.cups"
+            :id="'cup'+c.id"
+          >
+          <label class="form-check-label" :for="'cup'+c.id">{{ c.name }}</label><br>
         </div>
       </div>
 
       <button type="submit" class="btn btn-primary">Actualizar</button>
-      <router-link to="/receptions" class="btn btn-secondary">Cancelar</router-link>
+      <a href="/receptions" class="btn btn-secondary">Cancelar</a>
     </form>
   </div>
 </template>
@@ -37,10 +51,15 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
-import { useRouter, useRoute } from 'vue-router'
+import { useRoute } from 'vue-router'
 
-const router = useRouter()
 const route = useRoute()
+const receptionId = route.params.id // Si usas Vue Router para pasar ID
+
+const patients = ref([])
+const cups = ref([])
+const errors = ref([])
+
 const form = ref({
   patient_id: '',
   observations: '',
@@ -48,28 +67,46 @@ const form = ref({
   cups: []
 })
 
-const patients = ref([])
-const cups = ref([])
+// Cargar datos del paciente, CUPS y recepción actual
+onMounted(async () => {
+  try {
+    // Pacientes
+    const resPatients = await axios.get('/api/patients')
+    patients.value = resPatients.data
 
-const fetchData = async () => {
-  const patientsRes = await axios.get('/api/patients')
-  patients.value = patientsRes.data
+    // CUPS
+    const resCups = await axios.get('/api/cups')
+    cups.value = resCups.data
 
-  const cupsRes = await axios.get('/api/cups')
-  cups.value = cupsRes.data
+    // Recepción a editar
+    const resReception = await axios.get(`/api/receptions/${receptionId}`)
+    form.value.patient_id = resReception.data.patient_id
+    form.value.observations = resReception.data.observations
+    form.value.status = resReception.data.status
+    form.value.cups = resReception.data.cups.map(c => c.id) // muchos a muchos
+  } catch (e) {
+    console.error(e)
+  }
+})
 
-  const receptionRes = await axios.get(`/api/receptions/${route.params.id}`)
-  const r = receptionRes.data
-  form.value.patient_id = r.patient_id
-  form.value.observations = r.observations
-  form.value.status = r.status
-  form.value.cups = r.cups.map(c => c.id)
+const submitForm = async () => {
+  errors.value = []
+  try {
+    await axios.put(`/api/receptions/${receptionId}`, form.value)
+    window.location.href = '/receptions' // Redirige al listado
+  } catch (e) {
+    if (e.response && e.response.data.errors) {
+      errors.value = Object.values(e.response.data.errors).flat()
+    } else {
+      errors.value = ['Error al actualizar la recepción']
+    }
+  }
 }
-
-const submit = async () => {
-  await axios.put(`/api/receptions/${route.params.id}`, form.value)
-  router.push('/receptions')
-}
-
-onMounted(fetchData)
 </script>
+
+<style scoped>
+.container {
+  max-width: 800px;
+  margin-top: 20px;
+}
+</style>

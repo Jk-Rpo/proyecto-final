@@ -33,7 +33,7 @@
       </div>
 
       <!-- Contenido principal renderizado según la ruta -->
-      <main class="container">
+      <main class="container p-4">
         <router-view @notify="showMessage" />
       </main>
     </div>

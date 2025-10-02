@@ -8,12 +8,16 @@
         <title>{{ config('app.name', 'Laravel') }}</title>
 
         <!-- Fonts -->
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('sistinpat_original.jpg') }}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('sistinpat_original.jpg') }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('sistinpat_original.jpg') }}">
+
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 
         <!-- Scripts -->
-        {{-- @vite(['resources/css/app.css', 'resources/js/app.js']) --}}
-        @vite(['resources/js/app.js'])
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">
         <div id="app">
@@ -30,10 +34,12 @@
                 @endisset
     
                 <!-- Page Content -->
-                <main>
-                    @hasSection('content')
-                        @yield('content')
-                    @endif
+                <main class="container mx-auto">
+                    <div class="p-4">
+                        @hasSection('content')
+                            @yield('content')
+                        @endif
+                    </div>
                 </main>
             </div>
         </div>

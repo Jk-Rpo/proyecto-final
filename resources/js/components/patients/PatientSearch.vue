@@ -1,21 +1,21 @@
 <template>
-  <div class="container mt-4">
-    <h2>Buscar Paciente</h2>
-
-    <!-- Input de búsqueda -->
-    <div class="mb-3">
-      <label for="identity" class="form-label">Número de Documento</label>
-      <input
-        v-model="identity"
-        type="text"
-        id="identity"
-        class="form-control"
-        placeholder="Ingrese el número de documento"
-      />
-    </div>
-
-    <!-- Botón buscar -->
-    <button @click="searchPatient" class="btn btn-primary">Buscar</button>
+  <div class="mt-4">    <!-- Input de búsqueda -->
+    <template v-if="showSearch">
+      <div class="mb-3 flex flex-col">
+        <label for="identity" class="form-label">Número de Documento</label>
+        <input
+          v-model="identity"
+          type="text"
+          id="identity"
+          class="form-control"
+          autocomplete="off"
+          placeholder="Ingrese el número de documento"
+        />
+      </div>
+  
+      <!-- Botón buscar -->
+      <button @click="searchPatient" class="btn btn-primary">Buscar</button>
+    </template>
 
     <!-- Mensaje de error -->
     <div v-if="error" class="alert alert-danger mt-3">
@@ -23,18 +23,29 @@
     </div>
 
     <!-- Resultado -->
-    <div v-if="patient" class="card mt-4">
-      <div class="card-body">
-        <h5 class="card-title">
-          {{ patient.first_name }} {{ patient.second_name ?? '' }}
+    <div v-if="patient" class="flex flex-wrap mt-4">
+      <div class="w-full md:w-1/2 md:px-4">
+        <p class="pb-2"><strong>Nombres y Apellidos:</strong> {{ patient.first_name }} {{ patient.second_name ?? '' }}
           {{ patient.first_surname }} {{ patient.second_surname ?? '' }}
-        </h5>
-        <p><strong>Documento:</strong> {{ patient.identity_type }} {{ patient.identity }}</p>
-        <p><strong>Fecha de nacimiento:</strong> {{ patient.birthdate }}</p>
-        <p><strong>Género:</strong> {{ patient.gender }}</p>
-        <p><strong>Teléfono:</strong> {{ patient.phone }}</p>
-        <p><strong>Dirección:</strong> {{ patient.address }}</p>
-        <p><strong>Email:</strong> {{ patient.email }}</p>
+        </p>
+      </div>
+      <div class="w-full md:w-1/2 md:px-4">
+        <p class="pb-2"><strong>Documento:</strong> {{ patient.identity_type }} - {{ patient.identity }}</p>
+      </div>
+      <div class="w-full md:w-1/2 md:px-4">
+        <p class="pb-2"><strong>Fecha de nacimiento:</strong> {{ patient.birthdate }}</p>
+      </div>
+      <div class="w-full md:w-1/2 md:px-4">
+        <p class="pb-2"><strong>Género:</strong> {{ patient.gender }}</p>
+      </div>
+      <div class="w-full md:w-1/2 md:px-4">
+        <p class="pb-2"><strong>Teléfono:</strong> {{ patient.phone }}</p>
+      </div>
+      <div class="w-full md:w-1/2 md:px-4">
+        <p class="pb-2"><strong>Dirección:</strong> {{ patient.address }}</p>
+      </div>
+      <div class="w-full md:w-1/2 md:px-4">
+        <p class="pb-2"><strong>Email:</strong> {{ patient.email }}</p>
       </div>
     </div>
   </div>
@@ -47,6 +58,14 @@ import axios from "axios";
 const identity = ref("");
 const patient = ref(null);
 const error = ref("");
+const props = defineProps({
+  showSearch: {
+    type: Boolean,
+    default: true
+  }
+});
+
+const emit = defineEmits(["handlePatient", "handlePatientNotFound"]);
 
 const searchPatient = async () => {
   error.value = "";
@@ -60,8 +79,15 @@ const searchPatient = async () => {
   try {
     const response = await axios.get(`/api/patients/search/${identity.value}`);
     patient.value = response.data;
+    emit("handlePatient", patient.value);
   } catch (err) {
     error.value = err.response?.data?.message || "Error al buscar paciente";
+    emit("handlePatientNotFound");
   }
 };
+
+defineExpose({
+  patient,
+  error
+})
 </script>

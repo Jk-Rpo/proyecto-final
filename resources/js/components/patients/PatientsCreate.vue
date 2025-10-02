@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto p-4">
+  <div class="p-4">
     <h1 class="text-xl font-bold mb-4">Crear Paciente</h1>
 
     <form @submit.prevent="savePatient" class="space-y-3">
@@ -48,8 +48,12 @@
         <input type="email" v-model="form.email" class="input" />
       </div>
 
-      <button class="btn btn-primary">Guardar</button>
-      <a href="/patients" class="btn btn-secondary ml-2">Cancelar</a>
+      <int-button type="primary" @click="savePatient">
+        Guardar
+      </int-button>
+      <int-button type="secondary" @click="href='/patients'">
+        Cancelar
+      </int-button>
     </form>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto p-4">
+  <div class="p-4">
     <h1 class="text-2xl font-bold mb-4">Pacientes</h1>
 
     <a href="/patients/create" class="btn btn-primary mb-3">

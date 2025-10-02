@@ -14,8 +14,7 @@ class ReceptionController extends Controller
      */
     public function index()
     {
-        $receptions = Reception::with(['patient', 'cups'])->latest()->paginate(10);
-        return view('receptions.index', compact('receptions'));
+        return view('receptions.index');
     }
 
     /**
@@ -23,43 +22,7 @@ class ReceptionController extends Controller
      */
     public function create()
     {
-        $patients = Patient::all();
-        $cups = Cup::all();
-        return view('receptions.create', compact('patients', 'cups'));
-    }
-
-    /**
-     * Guardar en la BD
-     */
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'patient_id'       => 'required|exists:patients,id',
-            'observations'     => 'nullable|string',
-            'status'           => 'required|string',
-            'priority'         => 'nullable|string',
-            'type_samples'     => 'nullable|string',
-            'consecutive'      => 'nullable|integer',
-            'quantity_samples' => 'nullable|integer',
-            'number_case'      => 'nullable|string',
-            'type_study'       => 'nullable|string',
-            'color'            => 'nullable|string',
-            'quantity_plates'  => 'nullable|integer',
-            'departure_date'   => 'nullable|date',
-            'delivered_to'     => 'nullable|string',
-            'cups'             => 'array|nullable', // IDs de cups
-        ]);
-
-        $auth = $request->user();
-        $validated['user_id'] = $auth->id;
-
-        $reception = Reception::create($validated);
-
-        if ($request->has('cups')) {
-            $reception->cups()->sync($request->cups);
-        }
-
-        return redirect()->route('receptions.index')->with('success', 'Recepción creada correctamente.');
+        return view('receptions.create');
     }
 
     /**
@@ -76,51 +39,17 @@ class ReceptionController extends Controller
      */
     public function edit(Reception $reception)
     {
-        $patients = Patient::all();
-        $cups = Cup::all();
         $reception->load('cups');
-        return view('receptions.edit', compact('reception', 'patients', 'cups'));
+        return view('receptions.edit', compact('reception'));
     }
 
-    /**
-     * Actualizar BD
-     */
-    public function update(Request $request, Reception $reception)
+    public function createPatient()
     {
-        $validated = $request->validate([
-            'patient_id'       => 'required|exists:patients,id',
-            'observations'     => 'nullable|string',
-            'status'           => 'required|string',
-            'priority'         => 'nullable|string',
-            'type_samples'     => 'nullable|string',
-            'consecutive'      => 'nullable|integer',
-            'quantity_samples' => 'nullable|integer',
-            'number_case'      => 'nullable|string',
-            'type_study'       => 'nullable|string',
-            'color'            => 'nullable|string',
-            'quantity_plates'  => 'nullable|integer',
-            'departure_date'   => 'nullable|date',
-            'delivered_to'     => 'nullable|string',
-            'cups'             => 'array|nullable',
-        ]);
-
-        $reception->update($validated);
-
-        if ($request->has('cups')) {
-            $reception->cups()->sync($request->cups);
-        }
-
-        return redirect()->route('receptions.index')->with('success', 'Recepción actualizada correctamente.');
+        return view('receptions.createPatient');
     }
 
-    /**
-     * Eliminar recepción
-     */
-    public function destroy(Reception $reception)
+    public function createSpecial()
     {
-        $reception->cups()->detach();
-        $reception->delete();
-
-        return redirect()->route('receptions.index')->with('success', 'Recepción eliminada correctamente.');
+        return view('receptions.createSpecial');
     }
 }

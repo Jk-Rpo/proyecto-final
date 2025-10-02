@@ -17,7 +17,7 @@ class PatientApiController extends Controller
     {
           $request->validate([
             'identity_type' => 'required|string|max:50',
-            'identity' => 'required|string|max:50',
+            'identity' => 'required|string|max:50|unique:patients,identity',
             'first_name' => 'required|string|max:50',
             'second_name' => 'nullable|string|max:50',
             'first_surname' => 'required|string|max:50',
@@ -41,7 +41,7 @@ class PatientApiController extends Controller
     {
          $data = $request->validate([
             'identity_type' => 'required|string|max:50',
-            'identity' => 'required|string|max:50',
+            'identity' => 'required|string|max:50|unique:patients,identity,' . $patient->id,
             'first_name' => 'required|string|max:50',
             'second_name' => 'nullable|string|max:50',
             'first_surname' => 'required|string|max:50',

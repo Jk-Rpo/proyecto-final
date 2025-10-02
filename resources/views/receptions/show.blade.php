@@ -1,5 +1,5 @@
 @extends('layouts.app')
 
 @section('content')
-<receptions-show></receptions-show>
+<receptions-show :id="{{ $reception->id }}"></receptions-show>
 @endsection

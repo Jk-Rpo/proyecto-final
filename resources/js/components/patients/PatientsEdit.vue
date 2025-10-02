@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto p-4">
+  <div class="p-4">
     <h1 class="text-xl font-bold mb-4">Editar Paciente</h1>
 
     <form @submit.prevent="updatePatient" class="space-y-3">

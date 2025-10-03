@@ -1,5 +1,6 @@
 <template>
-  <div class="mt-4">    <!-- Input de búsqueda -->
+  <div class="mt-4">
+    <!-- Input de búsqueda -->
     <template v-if="showSearch">
       <div class="mb-3 flex flex-col">
         <label for="identity" class="form-label">Número de Documento</label>
@@ -12,8 +13,8 @@
           placeholder="Ingrese el número de documento"
         />
       </div>
-  
-      <!-- Botón buscar -->
+
+      <!-- Botón buscar manual (opcional) -->
       <button @click="searchPatient" class="btn btn-primary">Buscar</button>
     </template>
 
@@ -25,7 +26,8 @@
     <!-- Resultado -->
     <div v-if="patient" class="flex flex-wrap mt-4">
       <div class="w-full md:w-1/2 md:px-4">
-        <p class="pb-2"><strong>Nombres y Apellidos:</strong> {{ patient.first_name }} {{ patient.second_name ?? '' }}
+        <p class="pb-2"><strong>Nombres y Apellidos:</strong> 
+          {{ patient.first_name }} {{ patient.second_name ?? '' }}
           {{ patient.first_surname }} {{ patient.second_surname ?? '' }}
         </p>
       </div>
@@ -52,12 +54,14 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import axios from "axios";
 
 const identity = ref("");
 const patient = ref(null);
 const error = ref("");
+const debounceTimer = ref(null);
+
 const props = defineProps({
   showSearch: {
     type: Boolean,
@@ -86,8 +90,23 @@ const searchPatient = async () => {
   }
 };
 
+// 👇 Aquí está el "timer/debounce"
+watch(identity, (newVal) => {
+  if (debounceTimer.value) clearTimeout(debounceTimer.value);
+
+  // espera 1000ms después de dejar de escribir
+  debounceTimer.value = setTimeout(() => {
+    if (newVal.trim() !== "") {
+      searchPatient();
+    } else {
+      patient.value = null;
+      error.value = "";
+    }
+  }, 1000);
+});
+
 defineExpose({
   patient,
   error
-})
+});
 </script>

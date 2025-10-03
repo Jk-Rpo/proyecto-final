@@ -9,6 +9,11 @@ export const typeSamples = [
   { id: 'Sangre', name: "Sangre" },
   { id: 'Orina', name: "Orina" },
   { id: 'Sedimento', name: "Sedimento" },
+  { id: 'Apendice cecal', name: "Apendice cecal" },
+  { id: 'Vesicula biliar', name: "Vesicula biliar" },
+  { id: 'Útero sin anexos', name: "Úterio sin anexos " },
+  { id: 'Útero con anexos', name: "Útero con anexos" },
+  { id: 'Colon', name: "Colon" },
 ]
 
 export const institutions = [
@@ -35,7 +40,7 @@ export const typeStudies = [
 export const typeColors = [
   { id: 'ZN-ZN-M-PM', name: "ZN-ZN-M-PM" },
   { id: 'ZN-PM', name: "ZN-PM" },
-  { id: 'TRICROMICO-PAS-P', name: "TRICROMICO-PAS-P" },
+  { id: 'TRICROMICO-PAS-PASD-HIERRO-COBRE-RETICULO', name: "TRICROMICO-PAS-PASD-HIERRO-COBRE-RETICULO" },
   { id: 'PAS-PM', name: "PAS-PM" },
   { id: 'MUCICARIM', name: "MUCICARIM" },
   { id: 'otro', name: "OTRO" },
